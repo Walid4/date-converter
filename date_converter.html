@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<h1>Hebrew Date Converter</h1>
+
+<input type="date" id="myDate">
+
+<p>Click the button to get the hebrew date.</p>
+
+<button onclick="DateConverter()">Convert</button>
+
+<p id="demo"></p>
+
+<script>
+async function DateConverter() {
+
+  var date = document.getElementById("myDate").value;
+  var dateArray = date.split("-");
+  var gy = dateArray[0];
+  var gm = dateArray[1];
+  var gd = dateArray[2];
+  
+  const usp = new URLSearchParams({
+    gy: gy,
+    gm: gm,
+    gd: gd,
+    g2h: '1'
+  })
+
+  var baseUrl = "https://www.hebcal.com/converter?cfg=json&";
+  var url = baseUrl.concat(usp);
+
+  const response = await fetch(url);
+  if (!response.ok) {
+    console.error(error);
+  } else {
+    const obj = await response.json();
+    var hebrewDate = "Year: " + JSON.stringify(obj.hy) + "<br>" + "Month: " + JSON.stringify(obj.hm) + "<br>" 
+      + "Day: " + JSON.stringify(obj.hd) + "<br>" + "Hebrew: " + JSON.stringify(obj.hebrew);
+    document.getElementById("demo").innerHTML = hebrewDate;
+  }
+}
+</script>
+
+</body>
+</html>
